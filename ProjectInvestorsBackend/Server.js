@@ -15,7 +15,9 @@ const app =express();
 app.use(cors())
 
 app.use(express.json())
+const itemrouter=require('./Routes/authRoutes')
 
+app.use('/',itemrouter)
 
 /* app.use('/api/auth',require('./Routes/authRoutes'))
 
