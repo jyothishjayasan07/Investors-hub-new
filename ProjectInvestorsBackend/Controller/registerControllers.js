@@ -10,7 +10,7 @@ const registerUser=async (req,res)=>{
             {userId:newUSer._id,
                 role:newUSer.role
             },
-            process.env.JWTsecret,
+            process.env.JWT_SECRET,
             {expiresIn: '2h' }
         )
         res.status(200).json({message:"Registered successfully",token})
@@ -39,7 +39,7 @@ const loginUser = async (req, res) => {
             {userId:user._id,
                 role:user.role
             },
-            process.env.JWTsecret,
+            process.env.JWT_SECRET,
             {expiresIn: '2h' }
         )
 
