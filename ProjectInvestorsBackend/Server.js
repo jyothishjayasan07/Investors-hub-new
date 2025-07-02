@@ -16,9 +16,9 @@ app.use(cors())
 
 app.use(express.json())
 const itemrouter=require('./Routes/authRoutes')
-
-app.use('/',itemrouter)
-
+const companyroute=require('./Routes/companyRoutes')
+app.use('/',itemrouter);
+app.use('/',companyroute)
 /* app.use('/api/auth',require('./Routes/authRoutes'))
 
 app.use('/api/adimin',require('./Routes/adminRoutes'))

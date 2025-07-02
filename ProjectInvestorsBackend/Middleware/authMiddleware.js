@@ -1,16 +1,19 @@
-const jwt=require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const authenticateToken=(req,res,next)=>{
-    const token =req.header('Authorization')?.split(" ")[1]
+const authenticateToken = (req, res, next) => {
+  const token = req.header("Authorization")?.split(" ")[1];
 
-    if (!token) return res.Status(400).json({message:"No token requird"})
+  if (!token) {
+    return res.status(400).json({ message: "No token provided" }); // ✅ fixed
+  }
 
-        try {
-            const decode=jwt.verify(token,process.env.JWTsecret);
-            req.user=decode;
-            next();
-        } catch (error) {
-            res.Status(401).json({message:"Invalid Token"})
-        }
-}
- module.exports=authenticateToken;
+//   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // ✅ check .env key name
+    req.user = decoded;
+    next();
+//   } catch (error) {
+//     return res.status(401).json({ message: "Invalid or expired token" }); // ✅ fixed
+//   }
+};
+
+module.exports = authenticateToken;
