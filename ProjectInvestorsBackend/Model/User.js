@@ -11,6 +11,24 @@ const registerSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+
+  number:{
+    type:String ,
+    require:true
+  },
+
+  otp:{
+    type:String,
+  },
+  otpExpire:{
+    type:Date
+  },
+  isVerified:{
+    type:Boolean,
+    default:false
+  },
+
+
   password: {
     type: String,
     required: true,
