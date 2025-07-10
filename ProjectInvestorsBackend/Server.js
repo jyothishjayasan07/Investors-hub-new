@@ -19,6 +19,10 @@ const itemrouter=require('./Routes/authRoutes')
 const companyroute=require('./Routes/companyRoutes')
 app.use('/',itemrouter);
 app.use('/',companyroute)
+
+app.get("/",(req,res)=>{
+    res.send("haii")
+})
 /* app.use('/api/auth',require('./Routes/authRoutes'))
 
 app.use('/api/adimin',require('./Routes/adminRoutes'))

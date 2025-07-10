@@ -27,6 +27,10 @@ const registerSchema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
+  isEmailverified:{
+  type:Boolean,
+    default:false
+  },
 
 
   password: {
