@@ -1,13 +1,14 @@
 const registerSchema = require('../Model/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const twilio = require('twilio')
+const twilio = require('twilio');
+const sendEmailverification = require('../Utils/EmailTOken');
 
 
 
 
 // otp
-const client = twilio(process.env.TWILIO_ACCOUNT_ID, process.env.TWILIO_ACCOUNT_TOKEN)
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 
 
 
@@ -28,6 +29,7 @@ const sendOtp = async (req, res) => {
     user.otp=otp
     user.otpExpire=otpExpire
     await user.save()// update user with otp, expiry
+    console.log(process.env.TWILIO_MOBILE)
 
     //send otptonumber
   await client.messages.create({
@@ -67,6 +69,12 @@ const verifyOtp = async (req, res) => {
   res.status(400).json({ message: "invalid otp" })
 }
 
+
+
+
+
+
+
 const registerUser = async (req, res) => {
 
   const newUSer = new registerSchema(req.body);
@@ -76,12 +84,15 @@ const registerUser = async (req, res) => {
   const token = jwt.sign(
     {
       userId: newUSer._id,
-      role: newUSer.role
+      role: newUSer.role,
+      email:newUSer.email
     },
     process.env.JWT_SECRET,
     { expiresIn: '2h' }
   )
-  res.status(200).json({ message: "Registered successfully", token })
+  await sendEmailverification(newUSer.email,token)
+  const verificationurl=`http://localhost:6000/verify-email?token=${token}`
+  res.status(200).json({ message: "Registered successfully", token , verificationurl})
 
 
 }
