@@ -91,7 +91,7 @@ const registerUser = async (req, res) => {
     { expiresIn: '2h' }
   )
   await sendEmailverification(newUSer.email,token)
-  const verificationurl=`http://localhost:6000/verify-email?token=${token}`
+  const verificationurl=`http://localhost:3000/verify-email?token=${token}`
   res.status(200).json({ message: "Registered successfully", token , verificationurl})
 
 
