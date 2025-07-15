@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext'
+import 'react-toastify/dist/ReactToastify.css';
 
 // import { sendOtp } from "../../Services/AuthServices";
 
@@ -46,43 +47,44 @@ const Register = () => {
 
 
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
 
-  // Client-side validations
   if (formData.password !== formData.confirmPassword) {
-    setError("Passwords do not match");
+    const msg = "Passwords do not match";
+    setError(msg);
+    toast.error(msg);
     return;
   }
 
   if (formData.password.length < 6) {
-    setError("Password must be at least 6 characters long");
+    const msg = "Password must be at least 6 characters long";
+    setError(msg);
+    toast.error(msg);
     return;
   }
 
   try {
     // 🔐 Register the user
-    const res = await register(formData); // register() from AuthContext
+    const res = await register(formData);
     console.log("Registration Response:", res);
 
-    // 📲 Send OTP after successful registration
+    
+
+    // 📲 Send OTP
     const resp = await sendOtp({ number: formData.number });
     console.log("OTP Response:", resp);
- 
 
-    
-    
-
-    // ✅ Show OTP modal
     setShowOtpModal(true);
 
-
   } catch (err) {
-
-    toast.error(err);
+    console.error("Registration Error:", err);
+    setError(err.message || "Something went wrong");
+    toast.error(err.message || "Something went wrong");
   }
 };
+
 
 const sendOtp = async (phone) => {
        console.log("otp number::",phone)
@@ -128,7 +130,7 @@ axios.request(config)
 .then((response) => {
   console.log(JSON.stringify(response.data));
   if(response.status==200){
-    navigate(formData.role === "company" ? "/company" : "/invest");
+    navigate(formData.role === "company" ? "/company" : "/investor");
   }
   else{
     alert("incorrect otp")
@@ -142,23 +144,7 @@ axios.request(config)
      
 }
 
-  // const sendOtp = async () => {
-  //   if (!formData.number || formData.number.length < 10) {
-  //     setError("Please enter a valid mobile number");
-  //     return;
-  //   }
 
-  //   try {
-  //     setLoading(true);
-  //     // Simulate API call (replace this with actual API)
-  //     await new Promise((resolve) => setTimeout(resolve, 1000));
-  //     setShowOtpModal(true);
-  //   } catch (err) {
-  //     setError("Failed to send OTP");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
 
   const handleInputChange = (e) => {
@@ -186,11 +172,11 @@ axios.request(config)
               </p>
             </div>
 
-            {error && (
+         {/*    {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
                 {error}
               </div>
-            )}
+            )} */}
 
             <form onSubmit={handleSubmit} className="space-y-6">
           <div >
@@ -425,11 +411,7 @@ axios.request(config)
               </p>
             </div>
           </div>
-          <ToastContainer
-  position="top-center"
-  toastClassName="!left-1/2 !-translate-x-1/2 !top-1/2 !-translate-y-1/2 absolute mt-5"
-  bodyClassName="text-center"
-/>
+
         </div>
         
       </div>
@@ -466,6 +448,7 @@ axios.request(config)
       )}
 
     
+<ToastContainer position="top-center" autoClose={3000} />
 
     </>
   );
