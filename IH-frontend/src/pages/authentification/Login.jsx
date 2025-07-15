@@ -1,24 +1,49 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const {login }=useContext(AuthContext)
+const navigate=useNavigate()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
 
-    try {
-      await login(email, password);
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Invalid email or password");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+
+  try {
+    const { data, status } = await login({ email, password });
+    console.log("res:", data);
+
+    // Redirect based on role
+    if (status === 200) {
+      navigate(data.user.role === "company" ? "/company" : "/investor");
     }
-  };
+
+  } catch (err) {
+    console.error("Login error:", err);
+
+    if (err.status === 401) {
+      toast.error("Email is not registered");
+    } else if (err.status === 402) {
+      toast.error("Phone number not verified");
+    } else if (err.status === 403) {
+      toast.error("Email not verified");
+    } else {
+      toast.error(err.message || "Invalid email or password");
+    }
+
+    setError(err.message || "Invalid email or password");
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -34,11 +59,11 @@ const Login = () => {
             <p className="text-gray-600">Sign in to your InvestorHub account</p>
           </div>
 
-          {error && (
+        {/*   {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
               {error}
             </div>
-          )}
+          )} */}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -125,6 +150,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 };
