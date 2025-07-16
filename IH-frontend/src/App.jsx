@@ -8,6 +8,8 @@ import ProtectedRoute from "./auth/ProtectRoute";
 import HomeMain from "./pages/Home/HomeMain";
 import Company from "./pages/Company _Dashboard/Company";
 import Admindash from "./pages/authentification/Admindash";
+import InvestorDashboard from "./pages/Investor/Investordashboard";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 function App() {
   return (
@@ -48,7 +50,7 @@ function App() {
   path="/superadmin"
   element={
     <ProtectedRoute allowedRoles={["superadmin"]}>
-   <Admindash/>
+   <AdminDashboard/>
     </ProtectedRoute>
   }
 />
@@ -57,7 +59,7 @@ function App() {
   path="/investor"
   element={
     <ProtectedRoute allowedRoles={["investor"]}>
-      <DashboardInvest />
+      <InvestorDashboard/>
     </ProtectedRoute>
   }
 />
