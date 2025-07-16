@@ -7,8 +7,10 @@ const transporter=nodemiler.createTransport({
         pass:process.env.EMAIL_PASS
     }
 })
+  
 
 const sendEmailverification=async(to,token)=>{
+
     const verificationurl=`http://localhost:3000/verify-email?token=${token}`
 
 
@@ -22,6 +24,10 @@ const sendEmailverification=async(to,token)=>{
        <button> <a href="${verificationurl}"> Verify </a></button>
         `
     })
+    console.log('sent mail');
+
+    
+    
     
 }
 

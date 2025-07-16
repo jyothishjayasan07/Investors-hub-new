@@ -2,7 +2,8 @@ const registerSchema = require('../Model/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
-const sendEmailverification = require('../Utils/EmailTOken');
+const sendEmailverification = require('../Utils/EmailToken');
+
 
 
 
@@ -76,26 +77,50 @@ const verifyOtp = async (req, res) => {
 
 
 const registerUser = async (req, res) => {
+  const { email, number } = req.body;
 
-  const newUSer = new registerSchema(req.body);
+  try {
+    // 🔍 Check if email already exists
+    const existingUser = await registerSchema.findOne({ email });
+    if (existingUser) {
+      return res.status(401).json({ message: "Email already exists" });
+    }
 
-  const user = await newUSer.save();
-  // token 
-  const token = jwt.sign(
-    {
-      userId: newUSer._id,
-      role: newUSer.role,
-      email:newUSer.email
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: '2h' }
-  )
-  await sendEmailverification(newUSer.email,token)
-  const verificationurl=`http://localhost:6000/verify-email?token=${token}`
-  res.status(200).json({ message: "Registered successfully", token , verificationurl})
+    // (Optional) check for duplicate phone number
+    // const existingNumber = await registerSchema.findOne({ number });
+    // if (existingNumber) {
+    //   return res.status(402).json({ message: "Phone number already exists" });
+    // }
 
+    // ✅ Save new user
+    const newUser = new registerSchema(req.body);
+    const user = await newUser.save();
 
-}
+    // 🔐 Generate token
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        role: user.role,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+   await sendEmailverification(user.email,token)
+    const verificationurl = `http://localhost:3000/verify-email?token=${token}`;
+
+    return res.status(200).json({
+      message: "Registered successfully",
+      token,
+      verificationurl,
+    });
+
+  } catch (err) {
+    console.error("Registration Error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 const loginUser = async (req, res) => {
@@ -105,27 +130,29 @@ const loginUser = async (req, res) => {
     // Check if email exists
     const user = await registerSchema.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'User not found' }); // ✅ return prevents further code from running
+      return res.status(401).json({ message: 'User not found' }); // ✅ return prevents further code from running
     }
 
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Password is Incorrect' }); // ✅ return prevents duplicate response
+      return res.status(402).json({ message: 'Password is Incorrect' }); // ✅ return prevents duplicate response
     }
    
     if(!user.isVerified) return res.status(403).json({message:"phone number not verified"})
+      if(!user.isEmailverified) return res.status(404).json({message:"email not verified"})
     const token = jwt.sign(
       {
         userId: user._id,
-        role: user.role
+        role: user.role,
+        email:user.email
       },
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     )
 
     // Login successful
-    return res.status(200).json({ message: 'Login successful', token }); // ✅ only response sent
+    return res.status(200).json({ message: 'Login successful', token,user:{email:user.email,role:user.role}}); // ✅ only response sent
 
   } catch (error) {
     console.error('Login Error:', error);
