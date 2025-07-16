@@ -10,7 +10,7 @@ const transporter=nodemiler.createTransport({
   
 
 const sendEmailverification=async(to,token)=>{
-   
+
     const verificationurl=`http://localhost:3000/verify-email?token=${token}`
 
 
