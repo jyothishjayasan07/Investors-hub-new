@@ -26,6 +26,7 @@ router.get('/verify-email', async(req,res)=>{
 
         if(user){
              user.isEmailverified=true;
+             await user.save()
              res.send("Email is Verified Successfully")
         }
         else{

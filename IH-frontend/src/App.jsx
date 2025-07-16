@@ -6,6 +6,9 @@ import Dashboard from "./pages/authentification/Dashboard";
 import DashboardInvest from "./pages/authentification/DashboardInvest";
 import PublicRoute from "./auth/PublicRoute";
 import ProtectedRoute from "./auth/ProtectRoute";
+import Header from "./pages/Home/Header";
+import { Home } from "lucide-react";
+import HomeMain from "./pages/Home/HomeMain";
 
 function App() {
   return (
@@ -13,9 +16,15 @@ function App() {
     <Routes>
 
 
-     <Route path="/" element={
+     <Route path="/login" element={
     <PublicRoute>  
       <Login />
+      </PublicRoute>
+      }></Route>
+
+        <Route path="/" element={
+    <PublicRoute>  
+<HomeMain/>
       </PublicRoute>
       }></Route>
 
