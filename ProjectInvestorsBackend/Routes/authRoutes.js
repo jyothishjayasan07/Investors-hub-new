@@ -27,12 +27,23 @@ router.get("/verify-email", async (req, res) => {
 
     const user = await Register.findOne({ email }); // ✅ use findOne to get a single user
 
+<<<<<<< HEAD
     if (user) {
       user.isEmailverified = true;
       await user.save();
       res.send("Email is Verified Successfully");
     } else {
       res.status(400).send("User Not found");
+=======
+        if(user){
+             user.isEmailverified=true;
+             await user.save()
+             res.send("Email is Verified Successfully")
+        }
+        else{
+            res.status(400).send("User Not found")
+        }
+>>>>>>> 8fd51b064f63acf225298ac2fc5b744f447bfe43
     }
   } catch (err) {
     res.status(400).send("Invaild Error");

@@ -5,8 +5,6 @@ import Register from "./pages/authentification/Register";
 import DashboardInvest from "./pages/authentification/DashboardInvest";
 import PublicRoute from "./auth/PublicRoute";
 import ProtectedRoute from "./auth/ProtectRoute";
-import Admindash from "./pages/authentification/Admindash";
-import Company from "./pages/authentification/Company";
 
 function App() {
   return (
@@ -14,9 +12,15 @@ function App() {
     <Routes>
 
 
-     <Route path="/" element={
+     <Route path="/login" element={
     <PublicRoute>  
       <Login />
+      </PublicRoute>
+      }></Route>
+
+        <Route path="/" element={
+    <PublicRoute>  
+<HomeMain/>
       </PublicRoute>
       }></Route>
 
