@@ -5,6 +5,9 @@ import Register from "./pages/authentification/Register";
 import DashboardInvest from "./pages/authentification/DashboardInvest";
 import PublicRoute from "./auth/PublicRoute";
 import ProtectedRoute from "./auth/ProtectRoute";
+import HomeMain from "./pages/Home/HomeMain";
+import Company from "./pages/Company _Dashboard/Company";
+import Admindash from "./pages/authentification/Admindash";
 
 function App() {
   return (
