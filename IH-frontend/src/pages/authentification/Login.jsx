@@ -24,7 +24,13 @@ const handleSubmit = async (e) => {
 
     // Redirect based on role
     if (status === 200) {
-      navigate(data.user.role === "company" ? "/company" : "/investor");
+      const roleRoutes = {
+        company: "/company",
+        investor: "/investor",
+        superadmin: "/superadmin",
+      };
+      
+      navigate(roleRoutes[data.user.role] || "/");
     }
 
   } catch (err) {

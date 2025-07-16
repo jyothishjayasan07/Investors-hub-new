@@ -2,13 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/authentification/Login";
 import Register from "./pages/authentification/Register";
-import Dashboard from "./pages/authentification/Dashboard";
 import DashboardInvest from "./pages/authentification/DashboardInvest";
 import PublicRoute from "./auth/PublicRoute";
 import ProtectedRoute from "./auth/ProtectRoute";
-import Header from "./pages/Home/Header";
-import { Home } from "lucide-react";
-import HomeMain from "./pages/Home/HomeMain";
 
 function App() {
   return (
@@ -40,7 +36,16 @@ function App() {
   path="/company"
   element={
     <ProtectedRoute allowedRoles={["company"]}>
-      <Dashboard />
+      <Company/>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/superadmin"
+  element={
+    <ProtectedRoute allowedRoles={["superadmin"]}>
+   <Admindash/>
     </ProtectedRoute>
   }
 />
