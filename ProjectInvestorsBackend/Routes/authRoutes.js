@@ -1,43 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const { registerUser , loginUser, sendOtp, verifyOtp} = require("../Controller/registerControllers");
-const jwt=require('jsonwebtoken')
+const {
+  registerUser,
+  loginUser,
+  sendOtp,
+  verifyOtp,
+} = require("../Controller/registerControllers");
+const jwt = require("jsonwebtoken");
 const Register = require("../Model/User");
-
 
 router.post("/register", registerUser);
 
-router.post('/login',loginUser);
+router.post("/login", loginUser);
 
-router.post('/otpsend',sendOtp)
+router.post("/otpsend", sendOtp);
 
-router.post('/verifyotp',verifyOtp)
+router.post("/verifyotp", verifyOtp);
 
-router.get('/verify-email', async(req,res)=>{
-    console.log("verify**");
-    
-    const {token}=req.query;
+router.get("/verify-email", async (req, res) => {
+  console.log("verify**");
 
-    try{
-        const {email}=jwt.verify(token,process.env.JWT_SECRET)
+  const { token } = req.query;
 
-   const user = await Register.findOne({ email }); // ✅ use findOne to get a single user
+  try {
+    const { email } = jwt.verify(token, process.env.JWT_SECRET);
 
+    const user = await Register.findOne({ email }); // ✅ use findOne to get a single user
 
-        if(user){
-             user.isEmailverified=true;
-             res.send("Email is Verified Successfully")
-        }
-        else{
-            res.status(400).send("User Not found")
-        }
+    if (user) {
+      user.isEmailverified = true;
+      await user.save();
+      res.send("Email is Verified Successfully");
+    } else {
+      res.status(400).send("User Not found");
     }
-    catch(err){
-        res.status(400).send("Inavaid Error")
-    }
-}
-)
-
-
+  } catch (err) {
+    res.status(400).send("Invaild Error");
+  }
+});
 
 module.exports = router;

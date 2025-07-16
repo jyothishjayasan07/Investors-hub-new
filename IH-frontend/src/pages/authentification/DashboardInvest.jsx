@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 function DashboardInvest() {
   return (
-    <div>DashboardInvest</div>
-  )
+    <div>
+     
+    </div>
+  );
 }
 
-export default DashboardInvest
+export default DashboardInvest;
