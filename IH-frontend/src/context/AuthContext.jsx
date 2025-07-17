@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }) => {
 
 // ✅ Keep this in AuthContext (as-is)
 const register = async (formData) => {
+  
   try {
     const response = await fetch('http://localhost:3000/register', {
       method: 'POST',

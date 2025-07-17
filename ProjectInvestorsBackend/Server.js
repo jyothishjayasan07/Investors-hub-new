@@ -30,6 +30,8 @@ app.use('/api/adimin',require('./Routes/adminRoutes'))
 app.use('/api/company',require('./Routes/companyRoutes'))
 
 app.use('/api/investor',require('./Routes/investorRoutes')) */
+app.use("/uploads", express.static("uploads"));
+
 
 
 const PORT=process.env.PORT||6000
