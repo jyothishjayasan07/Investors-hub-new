@@ -10,6 +10,7 @@ import Company from "./pages/Company _Dashboard/Company";
 
 import InvestorDashboard from "./pages/Investor/Investordashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import CreateAdmin from "./pages/Admin/CreateAdmin";
 
 function App() {
   return (
@@ -66,7 +67,7 @@ function App() {
 
 
     </Routes>
-    
+  
     </>
   );
 }
