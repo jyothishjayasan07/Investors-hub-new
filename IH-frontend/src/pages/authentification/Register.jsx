@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from '../../context/AuthContext'
-import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from "../../context/AuthContext";
+import "react-toastify/dist/ReactToastify.css";
 
 // import { sendOtp } from "../../Services/AuthServices";
-
-
 
 import {
   Mail,
@@ -21,8 +19,7 @@ import {
 import axios from "axios";
 import { useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
-
-
+import { useSearchParams } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +28,7 @@ const Register = () => {
     number: "",
     password: "",
     confirmPassword: "",
-    role: "company",
+    role: "investor" ? "investor" : "company",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -40,112 +37,103 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [otp, setOtp] = useState("");
-  const { register,user } = useContext(AuthContext);
+  const { register, user } = useContext(AuthContext);
 
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const defaultRole = params.get("role") || "company";
 
-  const navigate=useNavigate()
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, role: defaultRole }));
+  }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-
-  if (formData.password !== formData.confirmPassword) {
-    const msg = "Passwords do not match";
-    setError(msg);
-    toast.error(msg);
-    return;
-  }
-
-  if (formData.password.length < 6) {
-    const msg = "Password must be at least 6 characters long";
-    setError(msg);
-    toast.error(msg);
-    return;
-  }
-
-  try {
-    // 🔐 Register the user
-    const res = await register(formData);
-    console.log("Registration Response:", res);
-
-    
-
-    // 📲 Send OTP
-    const resp = await sendOtp({ number: formData.number });
-    console.log("OTP Response:", resp);
-
-    setShowOtpModal(true);
-
-  } catch (err) {
-    console.error("Registration Error:", err);
-    setError(err.message || "Something went wrong");
-    toast.error(err.message || "Something went wrong");
-  }
-};
-
-
-const sendOtp = async (phone) => {
-       console.log("otp number::",phone)
-        let data = JSON.stringify(phone);
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://localhost:3000/otpsend',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                console.log(JSON.stringify(response.data));
-                return response
-                
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
+    if (formData.password !== formData.confirmPassword) {
+      const msg = "Passwords do not match";
+      setError(msg);
+      toast.error(msg);
+      return;
     }
 
-const verifyOtp = async(number,otp)=>{
+    if (formData.password.length < 6) {
+      const msg = "Password must be at least 6 characters long";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
 
-let data = JSON.stringify({number,otp});
+    try {
+      // 🔐 Register the user
+      const res = await register(formData);
+      console.log("Registration Response:", res);
 
-let config = {
-  method: 'post',
-  maxBodyLength: Infinity,
-  url: 'http://localhost:3000/verifyotp',
-  headers: { 
-    'Content-Type': 'application/json'
-  },
-  data : data
-};
+      // 📲 Send OTP
+      const resp = await sendOtp({ number: formData.number });
+      console.log("OTP Response:", resp);
 
-axios.request(config)
-.then((response) => {
-  console.log(JSON.stringify(response.data));
-  if(response.status==200){
-    navigate(formData.role === "company" ? "/company" : "/investor");
-  }
-  else{
-    alert("incorrect otp")
-  }
-  
-})
-.catch((error) => {
-  console.log(error);
-});
+      setShowOtpModal(true);
+    } catch (err) {
+      console.error("Registration Error:", err);
+      setError(err.message || "Something went wrong");
+      toast.error(err.message || "Something went wrong");
+    }
+  };
 
-     
-}
+  const sendOtp = async (phone) => {
+    console.log("otp number::", phone);
+    let data = JSON.stringify(phone);
 
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:3000/otpsend",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
 
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
+  const verifyOtp = async (number, otp) => {
+    let data = JSON.stringify({ number, otp });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:3000/verifyotp",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        if (response.status == 200) {
+          navigate(formData.role === "company" ? "/company" : "/investor");
+        } else {
+          alert("incorrect otp");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -156,8 +144,11 @@ axios.request(config)
 
   return (
     <>
-      <div className={`min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4 ${showOtpModal ? 'blur-sm pointer-events-none' : ''}`}>
-
+      <div
+        className={`min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4 ${
+          showOtpModal ? "blur-sm pointer-events-none" : ""
+        }`}
+      >
         <div className="max-w-md w-full">
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="text-center mb-8">
@@ -172,64 +163,67 @@ axios.request(config)
               </p>
             </div>
 
-         {/*    {error && (
+            {/*    {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
                 {error}
               </div>
             )} */}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-          <div >
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    I am a...
-  </label>
-  <div className="grid grid-cols-2 gap-3">
-    <label
-      className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-        formData.role === "company"
-          ? "border-blue-500 bg-blue-50 text-blue-700"
-          : "border-gray-200 hover:border-gray-300"
-      }`}
-    >
-      <input
-        type="radio"
-        name="role"
-        value="company"
-        checked={formData.role === "company"}
-        onChange={(e) =>
-          setFormData({ ...formData, role: e.target.value })
-        }
-        className="hidden"
-        required
-      />
-      <Building2 className="h-6 w-6 mx-auto mb-2" />
-      <div className="text-sm font-medium text-center">Company</div>
-    </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  I am a...
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <label
+                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                      formData.role === "company"
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="role"
+                      value="company"
+                      checked={formData.role === "company"}
+                      onChange={(e) =>
+                        setFormData({ ...formData, role: e.target.value })
+                      }
+                      className="hidden"
+                      required
+                    />
+                    <Building2 className="h-6 w-6 mx-auto mb-2" />
+                    <div className="text-sm font-medium text-center">
+                      Company
+                    </div>
+                  </label>
 
-    <label
-      className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-        formData.role === "investor"
-          ? "border-blue-500 bg-blue-50 text-blue-700"
-          : "border-gray-200 hover:border-gray-300"
-      }`}
-    >
-      <input
-        type="radio"
-        name="role"
-        value="investor"
-        checked={formData.role === "investor"}
-        onChange={(e) =>
-          setFormData({ ...formData, role: e.target.value })
-        }
-        className="hidden"
-        required
-      />
-      <TrendingUp className="h-6 w-6 mx-auto mb-2" />
-      <div className="text-sm font-medium text-center">Investor</div>
-    </label>
-  </div>
-</div>
-
+                  <label
+                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                      formData.role === "investor"
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="role"
+                      value="investor"
+                      checked={formData.role === "investor"}
+                      onChange={(e) =>
+                        setFormData({ ...formData, role: e.target.value })
+                      }
+                      className="hidden"
+                      required
+                    />
+                    <TrendingUp className="h-6 w-6 mx-auto mb-2" />
+                    <div className="text-sm font-medium text-center">
+                      Investor
+                    </div>
+                  </label>
+                </div>
+              </div>
 
               <div>
                 <label
@@ -300,7 +294,6 @@ axios.request(config)
                   </button>
                 </div>
               </div>
-
 
               <div>
                 <label
@@ -402,23 +395,23 @@ axios.request(config)
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Already have an account?{" "}
-                <h1
+                <Link
                   to="/login"
-                  className="text-blue-600 hover:text-blue-700 font-semibold"
+                  className="text-blue-600 hover:text-blue-700 font-semibold cursor-pointer"
                 >
                   Sign in
-                </h1>
+                </Link>
               </p>
             </div>
           </div>
-
         </div>
-        
       </div>
       {showOtpModal && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center">
+        <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-50 via-white to-purple-50  flex items-center justify-center">
           <div className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-sm">
-            <h2 className="text-xl font-bold text-center text-gray-800 mb-4">Verify OTP</h2>
+            <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
+              Verify OTP
+            </h2>
             <p className="text-sm text-gray-600 mb-4 text-center">
               Enter the OTP sent to <strong>{formData.number}</strong>
             </p>
@@ -437,7 +430,9 @@ axios.request(config)
                 Cancel
               </button>
               <button
-                onClick={() => {verifyOtp(formData.number,otp)}}
+                onClick={() => {
+                  verifyOtp(formData.number, otp);
+                }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Verify
@@ -447,9 +442,7 @@ axios.request(config)
         </div>
       )}
 
-    
-<ToastContainer position="top-center" autoClose={3000} />
-
+      <ToastContainer position="top-center" autoClose={3000} />
     </>
   );
 };

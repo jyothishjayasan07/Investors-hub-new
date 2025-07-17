@@ -37,7 +37,7 @@ app.use("/uploads", express.static("uploads"));
 const PORT=process.env.PORT||6000
 
 app.listen(PORT,()=>{
-    console.log('App is Running At 6000');
+    console.log(`App is Running At ${PORT}`);
     
 })
 
