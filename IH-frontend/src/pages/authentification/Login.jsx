@@ -10,46 +10,43 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const {login }=useContext(AuthContext)
-const navigate=useNavigate()
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+    try {
+      const { data, status } = await login({ email, password });
+      console.log("res:", data);
 
-  try {
-    const { data, status } = await login({ email, password });
-    console.log("res:", data);
+      // Redirect based on role
+      if (status === 200) {
+        const roleRoutes = {
+          company: "/company",
+          investor: "/investor",
+          superadmin: "/superadmin",
+        };
 
-    // Redirect based on role
-    if (status === 200) {
-      const roleRoutes = {
-        company: "/company",
-        investor: "/investor",
-        superadmin: "/superadmin",
-      };
-      
-      navigate(roleRoutes[data.user.role] || "/");
+        navigate(roleRoutes[data.user.role] || "/");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+
+      if (err.status === 401) {
+        toast.error("Email is not registered");
+      } else if (err.status === 402) {
+        toast.error("Phone number not verified");
+      } else if (err.status === 403) {
+        toast.error("Email not verified");
+      } else {
+        toast.error(err.message || "Invalid email or password");
+      }
+
+      setError(err.message || "Invalid email or password");
     }
-
-  } catch (err) {
-    console.error("Login error:", err);
-
-    if (err.status === 401) {
-      toast.error("Email is not registered");
-    } else if (err.status === 402) {
-      toast.error("Phone number not verified");
-    } else if (err.status === 403) {
-      toast.error("Email not verified");
-    } else {
-      toast.error(err.message || "Invalid email or password");
-    }
-
-    setError(err.message || "Invalid email or password");
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -65,7 +62,7 @@ const handleSubmit = async (e) => {
             <p className="text-gray-600">Sign in to your InvestorHub account</p>
           </div>
 
-        {/*   {error && (
+          {/*   {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
               {error}
             </div>
@@ -145,7 +142,15 @@ const handleSubmit = async (e) => {
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-gray-600">Don't have an account? Sign up</p>
+            <p className="text-gray-600">
+              Don't have an account?
+              <Link
+                to="/register"
+                className="text-blue-600 hover:text-blue-700 font-semibold cursor-pointer"
+              >
+                Sign up
+              </Link>
+            </p>
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
