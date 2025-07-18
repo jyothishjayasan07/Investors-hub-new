@@ -17,8 +17,10 @@ app.use(cors())
 app.use(express.json())
 const itemrouter=require('./Routes/authRoutes')
 const companyroute=require('./Routes/companyRoutes')
+const adminRoutes=require('./Routes/adminRoutes')
 app.use('/',itemrouter);
 app.use('/',companyroute)
+app.use('/',adminRoutes);
 
 app.get("/",(req,res)=>{
     res.send("haii")

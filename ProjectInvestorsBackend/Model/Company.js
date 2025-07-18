@@ -26,7 +26,13 @@ const companyProjectSchema = new mongoose.Schema({
     companyId:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Register"
- }
+ },
+
+ status: {
+  type: String,
+  enum: ['pending', 'approved', 'rejected'],
+  default: 'pending'
+}
   
   
 },{
