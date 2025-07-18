@@ -11,6 +11,9 @@ import Company from "./pages/Company _Dashboard/Company";
 import InvestorDashboard from "./pages/Investor/Investordashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import CreateAdmin from "./pages/Admin/CreateAdmin";
+import AdminProjectCard from "./pages/Admin/AdminProjectCard";
+import AdminMangeUsers from "./pages/Admin/AdminMangeUsers";
+import AdminSingleProjectView from "./pages/Admin/AdminSingleProjectView";
 
 function App() {
   return (
@@ -52,9 +55,26 @@ function App() {
   element={
     <ProtectedRoute allowedRoles={["superadmin"]}>
    <AdminDashboard/>
+   
     </ProtectedRoute>
   }
-/>
+>
+{/* ------------------------------------cardProjets------------------------------ */}
+<Route
+  path="/superadmin/projects"
+  element={<AdminProjectCard/>}>
+
+  </Route>
+  {/* -------------------------------------users------------------------------------------- */}
+  <Route
+  path="/superadmin/users"
+  element={<AdminMangeUsers/>}>
+    
+  </Route>
+{/* -------------------------------------------------------------------------------------- */}
+
+<Route path="/superadmin/projects/:id" element={<AdminSingleProjectView />} />
+</Route>
 
 <Route
   path="/investor"

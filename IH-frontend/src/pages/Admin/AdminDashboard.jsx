@@ -4,6 +4,7 @@ import AdminSidebar from "./AdminSidebar";
 import AdminShowcars from "./AdminShowcars";
 import AdminProjectCard from "./AdminProjectCard";
 import CreateAdmin from "./CreateAdmin";
+import { Outlet } from "react-router-dom";
 
 function AdminDashboard() {
   const [display, setDisplay] = useState("dashboard");
@@ -71,52 +72,35 @@ function AdminDashboard() {
             total="1,240"
             icon={<User />}
             style="text-blue-600"
+            bgstyle='bg-white'
           />
           <AdminShowcars
             name="Projects"
             total="245"
             icon={<Folder />}
             style="text-green-600"
+              bgstyle='bg-white'
           />
           <AdminShowcars
             name="Investments"
             total="$8.5M"
             icon={<BarChart3 />}
             style="text-indigo-600"
+              bgstyle='bg-white'
           />
           <AdminShowcars
             name="Reports"
             total="24"
             icon={<AlertCircle />}
             style="text-red-600"
+              bgstyle='bg-white'
           />
         </div>
 
         {/* Section Based on Sidebar Selection */}
-        {display === "project" && (
-          <div>
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">
-              Manage Projects
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.map((project) => (
-                <AdminProjectCard key={project.id} project={project} />
-              ))}
-            </div>
-          </div>
-        )}
+        <Outlet />
 
-        {display === "users" && (
-          <div className="bg-white p-6 rounded-xl text-center shadow">
-            <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900">
-              User Management
-            </h3>
-            <p className="text-gray-600">
-              User management features coming soon.
-            </p>
-          </div>
-        )}
+
 
         {display === "reports" && (
           <div className="bg-white p-6 rounded-xl text-center shadow">

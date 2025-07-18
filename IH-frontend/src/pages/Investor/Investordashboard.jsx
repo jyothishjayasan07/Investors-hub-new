@@ -1,63 +1,46 @@
-import React, { useState } from 'react';
-import { TrendingUp, DollarSign, Calendar, Eye, Heart, MessageCircle, Filter } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  TrendingUp,
+  DollarSign,
+  Calendar,
+  Eye,
+  Heart,
+  MessageCircle,
+  Filter,
+} from 'lucide-react';
+
+
+import { getApprovedProjects } from '../../services/projectService';
+import { useAuth } from '../../context/AuthContext';
 
 const InvestorDashboard = () => {
   const [activeTab, setActiveTab] = useState('discover');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [projects, setProjects] = useState([]);
 
-  const mockProjects = [
-    {
-      id: '1',
-      title: 'EcoTech Solutions',
-      description: 'Revolutionary solar panel technology that increases efficiency by 40%',
-      category: 'Clean Energy',
-      fundingGoal: 500000,
-      currentFunding: 325000,
-      companyId: '1',
-      companyName: 'GreenTech Innovations',
-      status: 'active',
-      images: ['https://images.pexels.com/photos/9875414/pexels-photo-9875414.jpeg'],
-      tags: ['Solar', 'Clean Energy', 'Technology'],
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-20',
-    },
-    {
-      id: '2',
-      title: 'HealthAI Platform',
-      description: 'AI-powered diagnostic platform for early disease detection',
-      category: 'Healthcare',
-      fundingGoal: 750000,
-      currentFunding: 450000,
-      companyId: '2',
-      companyName: 'MedTech Innovations',
-      status: 'active',
-      images: ['https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg'],
-      tags: ['AI', 'Healthcare', 'Diagnostics'],
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-18',
-    },
-    {
-      id: '3',
-      title: 'Smart Agriculture System',
-      description: 'IoT-based farming solution to optimize crop yields and reduce water usage',
-      category: 'Agriculture',
-      fundingGoal: 300000,
-      currentFunding: 180000,
-      companyId: '3',
-      companyName: 'AgriTech Solutions',
-      status: 'active',
-      images: ['https://images.pexels.com/photos/2132227/pexels-photo-2132227.jpeg'],
-      tags: ['IoT', 'Agriculture', 'Sustainability'],
-      createdAt: '2024-01-12',
-      updatedAt: '2024-01-19',
-    },
-  ];
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const approved = await getApprovedProjects(token);
+        console.log(approved);
+        
+        setProjects(approved);
+      } catch (err) {
+        console.error("Failed to load approved projects:", err);
+      }
+    };
+
+    fetchProjects();
+  }, [token]);
 
   const categories = ['all', 'Clean Energy', 'Healthcare', 'Agriculture', 'Technology', 'Fintech'];
 
-  const filteredProjects = selectedCategory === 'all'
-    ? mockProjects
-    : mockProjects.filter(project => project.category === selectedCategory);
+  const filteredProjects =
+    selectedCategory === 'all'
+      ? projects
+      : projects.filter((project) => project.category === selectedCategory);
 
   const stats = [
     { label: 'Portfolio Value', value: '$2.4M', icon: DollarSign, color: 'green' },
@@ -73,7 +56,7 @@ const InvestorDashboard = () => {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
         <div className="relative">
           <img
-            src={project.images[0]}
+            src={`http://localhost:3000/uploads/${project.image}`}
             alt={project.title}
             className="w-full h-48 object-cover"
           />
@@ -108,16 +91,16 @@ const InvestorDashboard = () => {
             </div>
             <div className="flex justify-between text-sm mt-2">
               <span className="text-gray-600">
-                ${project.currentFunding.toLocaleString()} raised
+                ${project.currentFunding?.toLocaleString()}
               </span>
               <span className="font-semibold text-gray-900">
-                ${project.fundingGoal.toLocaleString()} goal
+                ${project.fundingGoal?.toLocaleString()}
               </span>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            {project.tags.map((tag, index) => (
+            {project.tags?.map((tag, index) => (
               <span
                 key={index}
                 className="bg-gray-100 text-gray-700 px-2 py-1 rounded-lg text-xs"
@@ -146,13 +129,11 @@ const InvestorDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Investor Dashboard</h1>
           <p className="text-gray-600">Discover and invest in promising projects</p>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
             <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
@@ -169,7 +150,6 @@ const InvestorDashboard = () => {
           ))}
         </div>
 
-        {/* Tabs */}
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-xl mb-8 w-fit">
           {[
             { id: 'discover', label: 'Discover Projects' },
@@ -190,10 +170,8 @@ const InvestorDashboard = () => {
           ))}
         </div>
 
-        {/* Content */}
         {activeTab === 'discover' && (
           <div>
-            {/* Filters */}
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-center gap-2">
                 <Filter className="h-5 w-5 text-gray-600" />
@@ -216,11 +194,14 @@ const InvestorDashboard = () => {
               </div>
             </div>
 
-            {/* Projects Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
+              {filteredProjects.length > 0 ? (
+                filteredProjects.map((project) => (
+                  <ProjectCard key={project._id} project={project} />
+                ))
+              ) : (
+                <p className="text-gray-500">No approved projects found.</p>
+              )}
             </div>
           </div>
         )}
@@ -229,7 +210,9 @@ const InvestorDashboard = () => {
           <div className="bg-white rounded-2xl p-8 text-center">
             <TrendingUp className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Your Portfolio</h3>
-            <p className="text-gray-600">Your investment portfolio will appear here once you make your first investment.</p>
+            <p className="text-gray-600">
+              Your investment portfolio will appear here once you make your first investment.
+            </p>
           </div>
         )}
 
@@ -237,7 +220,9 @@ const InvestorDashboard = () => {
           <div className="bg-white rounded-2xl p-8 text-center">
             <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Scheduled Meetings</h3>
-            <p className="text-gray-600">Your scheduled meetings with companies will appear here.</p>
+            <p className="text-gray-600">
+              Your scheduled meetings with companies will appear here.
+            </p>
           </div>
         )}
       </div>
