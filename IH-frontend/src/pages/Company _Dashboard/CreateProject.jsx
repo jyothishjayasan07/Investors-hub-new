@@ -53,7 +53,7 @@ function CreateProjectForm({ onClose,editproject ,setEditproject}) {
 
   try {
     if (editproject) {
-      await updateProject(editproject._id, data); // Add this function to context/service
+      await updateProject(editproject._id, data); 
       setEditproject(null)
     } else {
       await addProject(data);
