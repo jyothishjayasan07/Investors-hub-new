@@ -82,4 +82,28 @@ const projecByUser=async (req,res)=>{
         res.status(500).json({message:"server error",error:error.message})
     }
 }
-module.exports = {projectRegister,projecByUser,updateProject};
+
+const deleteProject = async (req, res) => {
+  try {
+    const { id: projectId } = req.params;
+    const companyId = req.user.userId;
+
+    // Check if project exists and belongs to the authenticated company
+    const project = await companyProjectSchema.findOneAndDelete({ _id: projectId, companyId });
+    if (!project) {
+      return res.status(404).json({ message: "Project not found or unauthorized access" });
+    }
+
+    res.status(200).json({
+      message: "Project deleted successfully",
+      data: project,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Project deletion failed",
+      error: error.message,
+    });
+  }
+
+}
+module.exports = {projectRegister,projecByUser,updateProject, deleteProject};

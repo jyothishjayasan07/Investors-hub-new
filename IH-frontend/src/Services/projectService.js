@@ -38,3 +38,18 @@ export const updateProject1 = async (projectId, payload, token) => {
   if (!res.ok) throw new Error(data.message || "Failed to update project");
   return data;
 };
+
+
+export const deleteProject = async (projectId, token) => {
+  const res = await fetch(`${API_URL}/project/${projectId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to delete project");
+  return data;
+};
+

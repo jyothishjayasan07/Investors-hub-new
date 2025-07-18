@@ -1,9 +1,11 @@
 import React from "react";
 import { useProjects } from "../../context/ProjectContext";
 import { Edit, Trash2, Calendar } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProjectList = ({setShowCreate, setEditproject}) => {
-  const { projects } = useProjects();
+  const { projects,deleteProjectById } = useProjects();
 
   const handleEditClick=(id)=>{
     const project=projects.find((p)=>id===p._id)
@@ -12,6 +14,13 @@ const ProjectList = ({setShowCreate, setEditproject}) => {
 
   }
 
+
+    const handleDelete = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this project?");
+    if (confirmed) {
+      await deleteProjectById(id);
+    }
+  };
   if (!projects.length) {
     return <p className="text-center text-gray-600">No projects found.</p>;
   }
@@ -29,7 +38,7 @@ const ProjectList = ({setShowCreate, setEditproject}) => {
               </span>
               <div className="flex gap-2">
                 <Edit onClick={()=>handleEditClick(project._id)} className="w-4 h-4 text-gray-500" />
-                <Trash2 className="w-4 h-4 text-red-500" />
+                <Trash2    onClick={() => handleDelete(project._id)} className="w-4 h-4 text-red-500" />
               </div>
             </div>
             {/* ✅ Project Image */}
@@ -57,9 +66,11 @@ const ProjectList = ({setShowCreate, setEditproject}) => {
               <button className="text-blue-600 font-medium">View</button>
               <Calendar className="w-4 h-4 text-gray-500" />
             </div>
+              
           </div>
         );
       })}
+    <ToastContainer   position="top-center"/>
     </div>
   );
 };

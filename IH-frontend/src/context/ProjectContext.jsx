@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { fetchProjects, createProject,updateProject1 } from "../services/projectService";
+import { fetchProjects, createProject,updateProject1, deleteProject } from "../services/projectService";
 import { useAuth } from "./AuthContext";
 import { toast } from "react-toastify";
 
@@ -46,6 +46,17 @@ const updateProject = async (projectId, formData) => {
   }
 };
 
+ const deleteProjectById = async (projectId) => {
+    try {
+      await deleteProject(projectId, token);
+      setProjects((prev) => prev.filter((p) => p._id !== projectId));
+      toast.success("Project deleted!");
+    } catch (err) {
+      toast.error(err.message || "Failed to delete project");
+    }
+  };
+
+
 
 
   useEffect(() => {
@@ -53,7 +64,7 @@ const updateProject = async (projectId, formData) => {
   }, [token]);
 
   return (
-    <ProjectContext.Provider value={{ projects, addProject, loadProjects ,updateProject}}>
+    <ProjectContext.Provider value={{ projects, addProject, loadProjects ,updateProject,deleteProjectById}}>
       {children}
     </ProjectContext.Provider>
   );
