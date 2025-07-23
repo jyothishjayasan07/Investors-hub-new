@@ -1,42 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AlertCircle, BarChart3, Folder, Plus, User } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
 import AdminShowcars from "./AdminShowcars";
 import AdminProjectCard from "./AdminProjectCard";
 import CreateAdmin from "./CreateAdmin";
 import { Outlet } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { getAllProjects } from "../../services/projectService";
+
 
 function AdminDashboard() {
   const [display, setDisplay] = useState("dashboard");
   const [showAdminCreate, setShowAdminCreate] = useState(false);
+  const [projectCount, setProjectCount] = useState(0);
 
+  
+  const { token } = useAuth(); 
   const handleOnClose = () => {
     setShowAdminCreate(false);
   };
 
-  const projects = [
-    {
-      id: "1",
-      title: "AI Financial Assistant",
-      description: "Automates financial planning using advanced AI.",
-      image:
-        "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
-    },
-    {
-      id: "2",
-      title: "Blockchain Voting System",
-      description: "Secure and transparent voting on the blockchain.",
-      image:
-        "https://images.pexels.com/photos/11035373/pexels-photo-11035373.jpeg",
-    },
-    {
-      id: "3",
-      title: "Remote Health Monitoring",
-      description: "Wearable devices to track patient health remotely.",
-      image:
-        "https://images.pexels.com/photos/8460155/pexels-photo-8460155.jpeg",
-    },
-  ];
+      useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await getAllProjects(token); // assuming it returns an array
+        setProjectCount(res.length);
+      } catch (error) {
+        console.error("Failed to fetch projects", error);
+      }
+    };
+
+    fetchProjects();
+  }, [token]); 
+
+
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -76,7 +73,7 @@ function AdminDashboard() {
           />
           <AdminShowcars
             name="Projects"
-            total="245"
+            total={projectCount.toString()}
             icon={<Folder />}
             style="text-green-600"
               bgstyle='bg-white'

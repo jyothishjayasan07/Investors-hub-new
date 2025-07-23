@@ -4,7 +4,7 @@ import { Edit, Trash2, Calendar } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ProjectList = ({setShowCreate, setEditproject}) => {
+const ProjectList = ({setShowCreate, setEditproject,setViewProject,setShowModal}) => {
   const { projects,deleteProjectById } = useProjects();
 
   const handleEditClick=(id)=>{
@@ -63,7 +63,10 @@ const ProjectList = ({setShowCreate, setEditproject}) => {
               ))}
             </div>
             <div className="flex justify-between mt-4">
-              <button className="text-blue-600 font-medium">View</button>
+              <button   onClick={() => {
+    setViewProject(project);
+    setShowModal(true);
+  }}  className="text-blue-600 font-medium">View</button>
               <Calendar className="w-4 h-4 text-gray-500" />
             </div>
               
