@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/authentification/Login";
 import Register from "./pages/authentification/Register";
@@ -14,80 +14,94 @@ import CreateAdmin from "./pages/Admin/CreateAdmin";
 import AdminProjectCard from "./pages/Admin/AdminProjectCard";
 import AdminMangeUsers from "./pages/Admin/AdminMangeUsers";
 import AdminSingleProjectView from "./pages/Admin/AdminSingleProjectView";
+import Header from "./pages/Header";
 
 function App() {
+  const location = useLocation();
+  const hideHeaderPaths = ["/login", "/register"];
+  const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
+
   return (
     <>
-    <Routes>
-
-
-     <Route path="/login" element={
-    <PublicRoute>  
-      <Login />
-      </PublicRoute>
-      }></Route>
-
-        <Route path="/" element={
-    <PublicRoute>  
-<HomeMain/>
-      </PublicRoute>
-      }></Route>
-
-     <Route path="/register" element={
-     <PublicRoute> 
-      <Register />
-      </PublicRoute>
-      }></Route>
-
-
+      {!shouldHideHeader && (
+        <div className="pb-[60px]">
+          <Header />
+        </div>
+      )}
+      <div>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          ></Route>
 
           <Route
-  path="/company"
-  element={
-    <ProtectedRoute allowedRoles={["company"]}>
-      <Company/>
-    </ProtectedRoute>
-  }
-/>
+            path="/"
+            element={
+              <PublicRoute>
+                <HomeMain />
+              </PublicRoute>
+            }
+          ></Route>
 
-<Route
-  path="/superadmin"
-  element={
-    <ProtectedRoute allowedRoles={["superadmin"]}>
-   <AdminDashboard/>
-   
-    </ProtectedRoute>
-  }
->
-{/* ------------------------------------cardProjets------------------------------ */}
-<Route
-  path="/superadmin/projects"
-  element={<AdminProjectCard/>}>
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          ></Route>
 
-  </Route>
-  {/* -------------------------------------users------------------------------------------- */}
-  <Route
-  path="/superadmin/users"
-  element={<AdminMangeUsers/>}>
-    
-  </Route>
-{/* -------------------------------------------------------------------------------------- */}
+          <Route
+            path="/company"
+            element={
+              <ProtectedRoute allowedRoles={["company"]}>
+                <Company />
+              </ProtectedRoute>
+            }
+          />
 
-<Route path="/superadmin/projects/:id" element={<AdminSingleProjectView />} />
-</Route>
+          <Route
+            path="/superadmin"
+            element={
+              <ProtectedRoute allowedRoles={["superadmin"]}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          >
+            {/* ------------------------------------cardProjets------------------------------ */}
+            <Route
+              path="/superadmin/projects"
+              element={<AdminProjectCard />}
+            ></Route>
+            {/* -------------------------------------users------------------------------------------- */}
+            <Route
+              path="/superadmin/users"
+              element={<AdminMangeUsers />}
+            ></Route>
+            {/* -------------------------------------------------------------------------------------- */}
 
-<Route
-  path="/investor"
-  element={
-    <ProtectedRoute allowedRoles={["investor"]}>
-      <InvestorDashboard/>
-    </ProtectedRoute>
-  }
-/>
+            <Route
+              path="/superadmin/projects/:id"
+              element={<AdminSingleProjectView />}
+            />
+          </Route>
 
-
-    </Routes>
-  
+          <Route
+            path="/investor"
+            element={
+              <ProtectedRoute allowedRoles={["investor"]}>
+                <InvestorDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
     </>
   );
 }
