@@ -2,6 +2,10 @@
 
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { jwtDecode } from "jwt-decode";// ✅ Correct
+
+import { useNavigate } from 'react-router-dom';
+
 
 import { toast } from 'react-toastify';
 // import { registerUser } from '../Services/AuthServices';
@@ -22,14 +26,26 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Logged in user
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true); // 🟡 New
+    const navigate = useNavigate(); // 👈 for redirect
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedToken = localStorage.getItem('token');
 
+
     if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
+       const decodedToken = jwtDecode(storedToken);
+      const currentTime = Date.now() / 1000;
+       if (decodedToken.exp < currentTime) {
+        // 🔴 Token expired
+        toast.error("Session expired. Please login again.");
+        logout(); // clear everything
+        navigate('/login'); // redirect to login
+      } else {
+        // ✅ Token still valid
+        setUser(JSON.parse(storedUser));
+        setToken(storedToken);
+      }
     }
 
     
@@ -37,10 +53,11 @@ export const AuthProvider = ({ children }) => {
 
     console.log(user);
     
-  }, []);
+  }, [navigate]);
 
 // ✅ Keep this in AuthContext (as-is)
 const register = async (formData) => {
+  
   try {
     const response = await fetch('http://localhost:3000/register', {
       method: 'POST',

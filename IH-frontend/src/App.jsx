@@ -7,9 +7,10 @@ import PublicRoute from "./auth/PublicRoute";
 import ProtectedRoute from "./auth/ProtectRoute";
 import HomeMain from "./pages/Home/HomeMain";
 import Company from "./pages/Company _Dashboard/Company";
-import Admindash from "./pages/authentification/Admindash";
+
 import InvestorDashboard from "./pages/Investor/Investordashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminProjectCard from "./pages/Admin/AdminProjectCard";
 
 function App() {
   return (
@@ -51,9 +52,26 @@ function App() {
   element={
     <ProtectedRoute allowedRoles={["superadmin"]}>
    <AdminDashboard/>
+   
     </ProtectedRoute>
   }
-/>
+>
+{/* ------------------------------------cardProjets------------------------------ */}
+<Route
+  path="/superadmin/projects"
+  element={<AdminProjectCard/>}>
+
+  </Route>
+  {/* -------------------------------------users------------------------------------------- */}
+  <Route
+  path="/superadmin/users"
+  element={<AdminMangeUsers/>}>
+    
+  </Route>
+{/* -------------------------------------------------------------------------------------- */}
+
+<Route path="/superadmin/projects/:id" element={<AdminSingleProjectView />} />
+</Route>
 
 <Route
   path="/investor"
@@ -66,7 +84,7 @@ function App() {
 
 
     </Routes>
-    
+  
     </>
   );
 }

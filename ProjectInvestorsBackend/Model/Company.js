@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
 const companyProjectSchema = new mongoose.Schema({
+
+ image: { type: String }, 
   title: {
     type: String,
     required: true,
@@ -18,13 +20,19 @@ const companyProjectSchema = new mongoose.Schema({
     required: true,
   },
   tags: {
-    type: String,
+    type: [String],
     required: true,
   },
     companyId:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Register"
- }
+ },
+
+ status: {
+  type: String,
+  enum: ['pending', 'approved', 'rejected'],
+  default: 'pending'
+}
   
   
 },{
