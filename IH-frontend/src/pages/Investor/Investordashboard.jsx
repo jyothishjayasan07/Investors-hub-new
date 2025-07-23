@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   TrendingUp,
   DollarSign,
@@ -7,16 +7,19 @@ import {
   Heart,
   MessageCircle,
   Filter,
-} from 'lucide-react';
+} from "lucide-react";
 
+import { getApprovedProjects } from "../../services/projectService";
+import { useAuth } from "../../context/AuthContext";
+import InvestorModal from "./InvestorModal";
 
-import { getApprovedProjects } from '../../services/projectService';
-import { useAuth } from '../../context/AuthContext';
-
-const InvestorDashboard = () => {
-  const [activeTab, setActiveTab] = useState('discover');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+const InvestorDashboard = ({onClose}) => {
+  const [activeTab, setActiveTab] = useState("discover");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [projects, setProjects] = useState([]);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const { token } = useAuth();
 
@@ -25,7 +28,7 @@ const InvestorDashboard = () => {
       try {
         const approved = await getApprovedProjects(token);
         console.log(approved);
-        
+
         setProjects(approved);
       } catch (err) {
         console.error("Failed to load approved projects:", err);
@@ -35,23 +38,58 @@ const InvestorDashboard = () => {
     fetchProjects();
   }, [token]);
 
-  const categories = ['all', 'Clean Energy', 'Healthcare', 'Agriculture', 'Technology', 'Fintech'];
+  const openModal = (project) => {
+    setSelectedProject(project);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedProject(null);
+  };
+  const categories = [
+    "all",
+    "Clean Energy",
+    "Healthcare",
+    "Agriculture",
+    "Technology",
+    "Fintech",
+  ];
 
   const filteredProjects =
-    selectedCategory === 'all'
+    selectedCategory === "all"
       ? projects
       : projects.filter((project) => project.category === selectedCategory);
 
   const stats = [
-    { label: 'Portfolio Value', value: '$2.4M', icon: DollarSign, color: 'green' },
-    { label: 'Active Investments', value: '12', icon: TrendingUp, color: 'blue' },
-    { label: 'Scheduled Meetings', value: '3', icon: Calendar, color: 'purple' },
-    { label: 'Projects Watched', value: '8', icon: Eye, color: 'orange' },
+    {
+      label: "Portfolio Value",
+      value: "$2.4M",
+      icon: DollarSign,
+      color: "green",
+    },
+    {
+      label: "Active Investments",
+      value: "12",
+      icon: TrendingUp,
+      color: "blue",
+    },
+    {
+      label: "Scheduled Meetings",
+      value: "3",
+      icon: Calendar,
+      color: "purple",
+    },
+    { label: "Projects Watched", value: "8", icon: Eye, color: "orange" },
   ];
 
   const ProjectCard = ({ project }) => {
-    const fundingPercentage = (project.currentFunding / project.fundingGoal) * 100;
+    const fundingPercentage =
+      (project.currentFunding / project.fundingGoal) * 100;
 
+
+    
+      
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
         <div className="relative">
@@ -76,12 +114,16 @@ const InvestorDashboard = () => {
             <span className="text-sm text-gray-500">{project.companyName}</span>
           </div>
 
-          <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
+          <p className="text-gray-600 mb-4 line-clamp-2">
+            {project.description}
+          </p>
 
           <div className="mb-4">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-gray-600">Funding Progress</span>
-              <span className="font-semibold">{fundingPercentage.toFixed(0)}%</span>
+              <span className="font-semibold">
+                {fundingPercentage.toFixed(0)}%
+              </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
@@ -111,9 +153,13 @@ const InvestorDashboard = () => {
           </div>
 
           <div className="flex gap-2">
-            <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-              Invest Now
-            </button>
+          <button
+  onClick={() => openModal(project)}
+  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+>
+  Invest Now
+</button>
+
             <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
               <MessageCircle className="h-4 w-4" />
             </button>
@@ -130,17 +176,26 @@ const InvestorDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Investor Dashboard</h1>
-          <p className="text-gray-600">Discover and invest in promising projects</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Investor Dashboard
+          </h1>
+          <p className="text-gray-600">
+            Discover and invest in promising projects
+          </p>
         </div>
 
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div
+              key={index}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-600 text-sm">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                    {stat.value}
+                  </p>
                 </div>
                 <div className={`bg-${stat.color}-100 p-3 rounded-xl`}>
                   <stat.icon className={`h-6 w-6 text-${stat.color}-600`} />
@@ -152,17 +207,17 @@ const InvestorDashboard = () => {
 
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-xl mb-8 w-fit">
           {[
-            { id: 'discover', label: 'Discover Projects' },
-            { id: 'portfolio', label: 'My Portfolio' },
-            { id: 'meetings', label: 'Meetings' },
+            { id: "discover", label: "Discover Projects" },
+            { id: "portfolio", label: "My Portfolio" },
+            { id: "meetings", label: "Meetings" },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-2 rounded-lg font-medium transition-all ${
                 activeTab === tab.id
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               {tab.label}
@@ -170,7 +225,7 @@ const InvestorDashboard = () => {
           ))}
         </div>
 
-        {activeTab === 'discover' && (
+        {activeTab === "discover" && (
           <div>
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-center gap-2">
@@ -184,11 +239,11 @@ const InvestorDashboard = () => {
                     onClick={() => setSelectedCategory(category)}
                     className={`px-4 py-2 rounded-xl font-medium transition-all ${
                       selectedCategory === category
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
                     }`}
                   >
-                    {category === 'all' ? 'All Categories' : category}
+                    {category === "all" ? "All Categories" : category}
                   </button>
                 ))}
               </div>
@@ -206,25 +261,36 @@ const InvestorDashboard = () => {
           </div>
         )}
 
-        {activeTab === 'portfolio' && (
+        {activeTab === "portfolio" && (
           <div className="bg-white rounded-2xl p-8 text-center">
             <TrendingUp className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Your Portfolio</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Your Portfolio
+            </h3>
             <p className="text-gray-600">
-              Your investment portfolio will appear here once you make your first investment.
+              Your investment portfolio will appear here once you make your
+              first investment.
             </p>
           </div>
         )}
 
-        {activeTab === 'meetings' && (
+        {activeTab === "meetings" && (
           <div className="bg-white rounded-2xl p-8 text-center">
             <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Scheduled Meetings</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Scheduled Meetings
+            </h3>
             <p className="text-gray-600">
               Your scheduled meetings with companies will appear here.
             </p>
           </div>
         )}
+
+<InvestorModal
+  visible={modalVisible}
+  onClose={closeModal}
+  project={selectedProject}
+/>
       </div>
     </div>
   );
