@@ -14,8 +14,7 @@ import { Link } from "react-router-dom";
 function HomeMain() {
   return (
     <>
-      <Header />
-      <div className="space-y-16 pt-8 ">
+      <div className="space-y-16 ">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 rounded-3xl p-8 md:p-16">
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
