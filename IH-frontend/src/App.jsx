@@ -11,6 +11,8 @@ import Company from "./pages/Company _Dashboard/Company";
 import InvestorDashboard from "./pages/Investor/Investordashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminProjectCard from "./pages/Admin/AdminProjectCard";
+import AdminManageUsers from "./pages/Admin/AdminMangeUsers";
+import AdminSingleProjectView from "./pages/Admin/AdminSingleProjectView";
 
 function App() {
   return (
@@ -65,7 +67,7 @@ function App() {
   {/* -------------------------------------users------------------------------------------- */}
   <Route
   path="/superadmin/users"
-  element={<AdminMangeUsers/>}>
+  element={<AdminManageUsers/>}>
     
   </Route>
 {/* -------------------------------------------------------------------------------------- */}

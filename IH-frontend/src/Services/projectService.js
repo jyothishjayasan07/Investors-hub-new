@@ -106,5 +106,25 @@ export const getApprovedProjects = async (token) => {
   return data;
 };
 
+export const handleReject = async (projectId, token) => {
+  const res = await fetch(`${API_URL}/reject/${projectId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.message || "Failed to reject project");
+  }
+
+  return await res.json();
+};
+
+
+
+
+
 
 

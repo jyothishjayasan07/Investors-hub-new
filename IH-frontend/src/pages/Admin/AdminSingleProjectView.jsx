@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
-import { getAllProjects, handleApprove } from "../../services/projectService";
+import { NavLink, useParams, useNavigate } from "react-router-dom"; // ✅ Add useNavigate here
+import { getAllProjects, handleApprove, handleReject } from "../../services/projectService";
 import { useAuth } from "../../context/AuthContext";
-
 
 const AdminSingleProjectView = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const { token } = useAuth();
+  const navigate = useNavigate(); // ✅ Initialize it here
 
   // Fetch project details
   useEffect(() => {
@@ -23,14 +23,24 @@ const AdminSingleProjectView = () => {
     fetchProject();
   }, [id, token]);
 
-  // ✅ Moved approveProject outside useEffect
   const approveProject = async (projectId) => {
     try {
-      await handleApprove(projectId, token); // pass both projectId and token
+      await handleApprove(projectId, token);
       alert("Project approved successfully");
     } catch (err) {
       alert("Failed to approve project");
       console.error("Approval error:", err);
+    }
+  };
+
+  const rejectProject = async (projectId) => {
+    try {
+      await handleReject(projectId, token);
+      alert("Project rejected and removed.");
+      navigate("/superadmin/projects"); // ✅ Now this will work
+    } catch (err) {
+      alert("Failed to reject project");
+      console.error("Rejection error:", err);
     }
   };
 
@@ -60,7 +70,10 @@ const AdminSingleProjectView = () => {
           </NavLink>
         </div>
         <div className="flex gap-3">
-          <button className="bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-500 text-sm">
+          <button
+            className="bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-500 text-sm"
+            onClick={() => rejectProject(project._id)}
+          >
             Reject
           </button>
           <button

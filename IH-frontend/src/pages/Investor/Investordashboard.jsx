@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   TrendingUp,
   DollarSign,
@@ -83,94 +85,134 @@ const InvestorDashboard = ({onClose}) => {
     { label: "Projects Watched", value: "8", icon: Eye, color: "orange" },
   ];
 
-  const ProjectCard = ({ project }) => {
-    const fundingPercentage =
-      (project.currentFunding / project.fundingGoal) * 100;
+ const ProjectCard = ({ project }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
+  const fundingPercentage = (project.currentFunding / project.fundingGoal) * 100;
 
-    
-      
-    return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
-        <div className="relative">
-          <img
-            src={`http://localhost:3000/uploads/${project.image}`}
-            alt={project.title}
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute top-4 left-4">
-            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              {project.category}
-            </span>
-          </div>
-          <button className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors">
-            <Heart className="h-5 w-5 text-gray-600" />
-          </button>
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 relative">
+      {/* Image Section */}
+      <div className="relative">
+        <img
+          src={`http://localhost:3000/uploads/${project.image}`}
+          alt={project.title}
+          className="w-full h-48 object-cover"
+        />
+        <div className="absolute top-4 left-4">
+          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+            {project.category}
+          </span>
+        </div>
+        <button className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors">
+          <Heart className="h-5 w-5 text-gray-600" />
+        </button>
+      </div>
+
+      {/* Project Info */}
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-3">
+          <h3 className="text-xl font-bold text-gray-900">{project.title}</h3>
+          <span className="text-sm text-gray-500">{project.companyName}</span>
         </div>
 
-        <div className="p-6">
-          <div className="flex items-start justify-between mb-3">
-            <h3 className="text-xl font-bold text-gray-900">{project.title}</h3>
-            <span className="text-sm text-gray-500">{project.companyName}</span>
+        <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
+
+        {/* Funding progress */}
+        <div className="mb-4">
+          <div className="flex justify-between text-sm mb-2">
+            <span className="text-gray-600">Funding Progress</span>
+            <span className="font-semibold">{fundingPercentage.toFixed(0)}%</span>
           </div>
-
-          <p className="text-gray-600 mb-4 line-clamp-2">
-            {project.description}
-          </p>
-
-          <div className="mb-4">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-gray-600">Funding Progress</span>
-              <span className="font-semibold">
-                {fundingPercentage.toFixed(0)}%
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(fundingPercentage, 100)}%` }}
-              ></div>
-            </div>
-            <div className="flex justify-between text-sm mt-2">
-              <span className="text-gray-600">
-                ${project.currentFunding?.toLocaleString()}
-              </span>
-              <span className="font-semibold text-gray-900">
-                ${project.fundingGoal?.toLocaleString()}
-              </span>
-            </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${Math.min(fundingPercentage, 100)}%` }}
+            ></div>
           </div>
-
-          <div className="flex flex-wrap gap-2 mb-4">
-            {project.tags?.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-gray-100 text-gray-700 px-2 py-1 rounded-lg text-xs"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex justify-between text-sm mt-2">
+            <span className="text-gray-600">${project.currentFunding?.toLocaleString()}</span>
+            <span className="font-semibold text-gray-900">${project.fundingGoal?.toLocaleString()}</span>
           </div>
+        </div>
 
-          <div className="flex gap-2">
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tags?.map((tag, index) => (
+            <span
+              key={index}
+              className="bg-gray-100 text-gray-700 px-2 py-1 rounded-lg text-xs"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 relative">
           <button
-  onClick={() => openModal(project)}
-  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
->
-  Invest Now
-</button>
+            onClick={() => openModal(project)}
+            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Invest Now
+          </button>
 
-            <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
-              <MessageCircle className="h-4 w-4" />
-            </button>
-            <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
-              <Calendar className="h-4 w-4" />
-            </button>
-          </div>
+          <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
+            <MessageCircle className="h-4 w-4" />
+          </button>
+
+          {/* Calendar Button */}
+       {/* Calendar Button */}
+{/* Calendar Button */}
+<div className="relative">
+  <button
+    onClick={() => setShowDatePicker(true)}
+    className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+  >
+    <Calendar className="h-4 w-4" />
+  </button>
+
+  {/* Centered Calendar Modal */}
+  {showDatePicker && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-sm p-6 relative">
+        {/* Close Button */}
+        <button
+          onClick={() => setShowDatePicker(false)}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl"
+        >
+          ✖
+        </button>
+
+        {/* Title */}
+        <h2 className="text-lg font-semibold mb-4 text-center text-gray-800">
+          Select Meeting Date
+        </h2>
+
+        {/* Date Picker */}
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => {
+            setSelectedDate(date);
+            setShowDatePicker(false);
+            alert(`You selected: ${date.toLocaleDateString()}`);
+          }}
+          inline
+        />
+      </div>
+    </div>
+  )}
+</div>
+
+
+
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50">

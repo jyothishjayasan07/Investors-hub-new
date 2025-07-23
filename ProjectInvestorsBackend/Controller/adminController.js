@@ -47,6 +47,21 @@ const getApprovedProjects = async (req, res) => {
   }
 };
 
+const rejectProject = async (req, res) => {
+  console.log("Rejecting project with ID:", req.params.id); // ✅
+  try {
+    const deleted = await companyProjectSchema.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    res.status(200).json({ message: "Project rejected and removed" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
 
 
-module.exports ={getallProjects,getAllusers,approveProject,getApprovedProjects};
+
+
+
+module.exports ={getallProjects,getAllusers,approveProject,getApprovedProjects,rejectProject};
