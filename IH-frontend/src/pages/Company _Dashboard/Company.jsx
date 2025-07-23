@@ -2,17 +2,26 @@ import React, { useState } from "react";
 import ProjectList from "./ProjectList";
 import CreateProject from "./CreateProject";
 import { Plus, TrendingUp, DollarSign, Users, Eye, Edit, Trash2, Calendar } from 'lucide-react';
+import ViewProjectDetails from "./ViewProjectDetails";
+import { useProjects } from "../../context/ProjectContext";
 
 
 const Company = () => {
   const [showCreate, setShowCreate] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [editproject,setEditproject]=useState(null)
+  const [viewProject, setViewProject] = useState(null); 
+    const { projects } = useProjects();
+      const activeProjectCount = projects.filter(p => p.status === "approved").length;
 const stats = [
     { label: 'Total Raised', value: '$325K', icon: DollarSign, color: 'green' },
-    { label: 'Active Projects', value: '1', icon: TrendingUp, color: 'blue' },
+    { label: 'Active Projects', value: activeProjectCount.toString(), icon: TrendingUp, color: 'blue' },
     { label: 'Interested Investors', value: '24', icon: Users, color: 'purple' },
     { label: 'Project Views', value: '1.2K', icon: Eye, color: 'orange' },
   ];
+
+
+
   const handleOnClose=()=>{
     setShowCreate(false)
     setEditproject(null)
@@ -47,8 +56,11 @@ const stats = [
             </div>
           ))}
         </div>
-      <ProjectList setEditproject={setEditproject} setShowCreate={setShowCreate}  />
+      <ProjectList setEditproject={setEditproject} setShowCreate={setShowCreate} setShowModal={setShowModal}   setViewProject={setViewProject} />
       {showCreate && <CreateProject onClose={()=>handleOnClose()}  editproject={editproject} setEditproject={setEditproject} />}
+        {showModal && (
+  <ViewProjectDetails  project={viewProject}  onClose={() => setShowModal(false)} />
+)}
     </div>
   );
 };
