@@ -70,7 +70,7 @@ function App() {
   element={<AdminManageUsers/>}>
     
   </Route>
-{/* -------------------------------------------------------------------------------------- */}
+
 
 <Route path="/superadmin/projects/:id" element={<AdminSingleProjectView />} />
 </Route>
