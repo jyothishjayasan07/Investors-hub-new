@@ -11,11 +11,12 @@ import Company from "./pages/Company _Dashboard/Company";
 import InvestorDashboard from "./pages/Investor/Investordashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import CreateAdmin from "./pages/Admin/CreateAdmin";
-import AdminProjectCard from "./pages/Admin/AdminProjectCard";
+
 import AdminMangeUsers from "./pages/Admin/AdminMangeUsers";
 import AdminSingleProjectView from "./pages/Admin/AdminSingleProjectView";
 import AdminIntrestedProj from "./pages/Admin/AdminIntrestedProj";
 import Header from "./pages/Header";
+import AdminProjectCard from "./pages/Admin/AdminProjectCard";
 
 function App() {
   const location = useLocation();
