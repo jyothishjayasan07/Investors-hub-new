@@ -1,4 +1,4 @@
-const Base_url=process.env.API_URL || "https://investors-hub-new.onrender.com";
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
  import axios from "axios";
 
   export  const sendOtp = async (phone) => {

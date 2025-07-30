@@ -2,7 +2,8 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode"; // ✅ Correct
 
 import { useLocation, useNavigate } from "react-router-dom";
- const API_URL = process.env.API_URL || "https://investors-hub-new.onrender.com"; // Use environment variable or default
+ // ✅ Use Vite's environment variable
+ const API_URL = import.meta.env.VITE_API_URL || "https://investors-hub-new.onrender.com"; // Use environment variable or default
 import { toast } from "react-toastify";
 // import { registerUser } from '../Services/AuthServices';
 
