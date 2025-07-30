@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAllScheduledMeetingsForProject } from "../../temp/projectService";
 import ViewProjectDetails from "./ViewProjectDetails";
-
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 const ProjectList = ({ setShowCreate, setEditproject, setViewProject, setShowModal, showModal, viewProject }) => {
   const { projects, deleteProjectById } = useProjects();
   const { token } = useAuth();
@@ -77,7 +77,7 @@ const ProjectList = ({ setShowCreate, setEditproject, setViewProject, setShowMod
 
             {/* Image */}
             <img
-              src={`http://localhost:3000/uploads/${project.image}`}
+              src={`Base_url/uploads/${project.image}`}
               alt={project.title}
               className="w-full h-48 object-cover rounded-lg mb-3"
             />
