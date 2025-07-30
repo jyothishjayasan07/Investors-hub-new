@@ -18,9 +18,12 @@ app.use(express.json())
 const itemrouter=require('./Routes/authRoutes')
 const companyroute=require('./Routes/companyRoutes')
 const adminRoutes=require('./Routes/adminRoutes')
+const investorRoutes=require('./Routes/investorRoutes')
 app.use('/',itemrouter);
 app.use('/',companyroute)
 app.use('/',adminRoutes);
+app.use('/',investorRoutes);
+
 
 app.get("/",(req,res)=>{
     res.send("haii")

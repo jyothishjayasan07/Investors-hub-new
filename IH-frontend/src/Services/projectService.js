@@ -106,5 +106,72 @@ export const getApprovedProjects = async (token) => {
   return data;
 };
 
+export const IntrestedProjects = async (projectId,availableDates, token) => {
+
+
+  const res = await fetch(`${API_URL}/intrested`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ projectId,availableDates }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to register interest");
+  return data;
+};
+
+ export const getAllIntrestedProjects = async (token) => {
+
+  const res = await fetch(`${API_URL}/intrested-projects`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to fetch interested projects");
+  return data;
+}
+
+export const scheduleMeeting = async (id, date, token) => {
+  const res = await fetch(`${API_URL}/intrested/${id}/schedule`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ selectedDate: date }), // ✅ Fix here
+  });
+
+  const resData = await res.json();
+
+  if (!res.ok) {
+    throw new Error(resData.message || "Failed to schedule meeting");
+  }
+
+  return resData;
+};
+
+// services/meetingService.js
+
+export const getAllScheduledMeetingsForProject = async (projectId, token) => {
+  try {
+    const res = await fetch(`${API_URL}/meetings/${projectId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch scheduled meetings");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Error fetching meetings:", err);
+    return []; // fallback
+  }
+};
 
 

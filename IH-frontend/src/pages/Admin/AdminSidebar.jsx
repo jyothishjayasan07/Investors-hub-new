@@ -7,6 +7,7 @@ function AdminSidebar({ onSelect, activeTab }) {
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 /> },
     { id: 'project', to:'/superadmin/projects' ,label: 'Projects', icon: <Folder /> },
     { id: 'users',to:'/superadmin/users', label: 'Users', icon: <User /> },
+    { id: 'create-admin', label: 'Intrested-Projects', icon: <User />, to: '/superadmin/create-admin' },
     { id: 'reports', label: 'Reports', icon: <AlertCircle /> },
   ];
 

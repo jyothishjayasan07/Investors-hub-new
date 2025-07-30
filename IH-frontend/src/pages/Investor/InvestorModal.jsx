@@ -1,11 +1,21 @@
 // components/InvestorModal.jsx
-import React from "react";
+import React, { useState } from "react";
 
-const InvestorModal = ({ visible, onClose, project }) => {
+const InvestorModal = ({ visible, onClose, project, onSubmit,handleDateChange,addDateField ,availableDates}) => {
   if (!visible || !project) return null;
 
   const fundingPercentage =
     (project.currentFunding / project.fundingGoal) * 100;
+
+  
+
+  const handleSubmit = () => {
+    onSubmit();
+    onClose();
+    // setAvailableDates([""]); // Reset modal state
+  };
+
+  if (!visible) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
@@ -72,13 +82,47 @@ const InvestorModal = ({ visible, onClose, project }) => {
           </div>
         </div>
 
-        <div className="flex justify-end mt-6">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-            Proceed to Invest
-          </button>
+        
+          <div className="bg-white p-6 rounded-xl w-[90%] max-w-md space-y-4">
+            <h2 className="text-xl font-bold">Select Your Available Dates</h2>
+
+            {availableDates.map((date, index) => (
+              <input
+                key={index}
+                type="datetime-local"
+                value={date}
+                onChange={(e) => handleDateChange(index, e.target.value)}
+                className="w-full border border-gray-300 p-2 rounded mb-2"
+              />
+            ))}
+
+            <button
+              onClick={addDateField}
+              className="text-blue-600 underline text-sm"
+            >
+              + Add another date
+            </button>
+
+           
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+              <button
+                className="bg-gray-200 px-4 py-2 rounded"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+             
+            </div>
+             <div className="flex justify-end mt-6">
+                <button onClick={handleSubmit} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                  Interested
+                </button>
+              </div>
         </div>
+             
       </div>
-    </div>
+
   );
 };
 

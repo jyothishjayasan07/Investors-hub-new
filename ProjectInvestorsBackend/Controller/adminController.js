@@ -1,4 +1,5 @@
 const companyProjectSchema = require('../Model/Company');
+const Intrested = require('../Model/Investor');
 const Register = require('../Model/User');
 
 const getallProjects = async (req, res) => {
@@ -48,5 +49,15 @@ const getApprovedProjects = async (req, res) => {
 };
 
 
+const getAllIntrestedProjects = async (req, res) => {
+  try {
+    const intrestedProjects = await Intrested.find().populate('projectId UserId');
+    res.status(200).json(intrestedProjects);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+}
 
-module.exports ={getallProjects,getAllusers,approveProject,getApprovedProjects};
+
+
+module.exports ={getallProjects,getAllusers,approveProject,getApprovedProjects,getAllIntrestedProjects};

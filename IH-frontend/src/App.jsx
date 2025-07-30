@@ -14,6 +14,7 @@ import CreateAdmin from "./pages/Admin/CreateAdmin";
 import AdminProjectCard from "./pages/Admin/AdminProjectCard";
 import AdminMangeUsers from "./pages/Admin/AdminMangeUsers";
 import AdminSingleProjectView from "./pages/Admin/AdminSingleProjectView";
+import AdminIntrestedProj from "./pages/Admin/AdminIntrestedProj";
 
 function App() {
   return (
@@ -71,6 +72,13 @@ function App() {
   element={<AdminMangeUsers/>}>
     
   </Route>
+    <Route
+  path="/superadmin/create-admin"
+  element={<AdminIntrestedProj/>}>
+    
+  </Route>
+
+
 {/* -------------------------------------------------------------------------------------- */}
 
 <Route path="/superadmin/projects/:id" element={<AdminSingleProjectView />} />

@@ -9,10 +9,16 @@ import { useAuth } from "../../context/AuthContext";
 import { getAllProjects } from "../../services/projectService";
 
 
+
 function AdminDashboard() {
   const [display, setDisplay] = useState("dashboard");
   const [showAdminCreate, setShowAdminCreate] = useState(false);
   const [projectCount, setProjectCount] = useState(0);
+  
+ 
+
+
+
 
   
   const { token } = useAuth(); 
@@ -37,14 +43,14 @@ function AdminDashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
+ 
       <div className="w-72 hidden lg:block">
         <AdminSidebar onSelect={setDisplay} activeTab={display} />
       </div>
 
-      {/* Main content */}
+  
       <div className="flex-1 p-6 space-y-8">
-        {/* Header */}
+  
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
@@ -62,7 +68,7 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* KPI Cards - Always Visible */}
+    
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <AdminShowcars
             name="Total Users"
@@ -94,7 +100,7 @@ function AdminDashboard() {
           />
         </div>
 
-        {/* Section Based on Sidebar Selection */}
+
         <Outlet />
 
 
@@ -110,6 +116,8 @@ function AdminDashboard() {
         )}
       </div>
       {showAdminCreate && <CreateAdmin onClose={()=>handleOnClose()}/> }
+
+       
     </div>
   );
 }
