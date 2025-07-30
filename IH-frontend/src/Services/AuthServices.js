@@ -1,4 +1,4 @@
-const Base_url='http://localhost:3000/'
+const Base_url=process.env.API_URL || "https://investors-hub-new.onrender.com";
  import axios from "axios";
 
   export  const sendOtp = async (phone) => {

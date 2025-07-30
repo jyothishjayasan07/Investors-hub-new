@@ -58,8 +58,7 @@ function App() {
             }
           ></Route>
 
-<<<<<<< HEAD
-  </Route>
+ 
   {/* -------------------------------------users------------------------------------------- */}
   <Route
   path="/superadmin/users"
@@ -74,7 +73,6 @@ function App() {
 
 
 {/* -------------------------------------------------------------------------------------- */}
-=======
           <Route
             path="/company"
             element={
@@ -83,7 +81,6 @@ function App() {
               </ProtectedRoute>
             }
           />
->>>>>>> 032c57b8bbd37644c5e3b331827cb430aca50c99
 
           <Route
             path="/superadmin"
