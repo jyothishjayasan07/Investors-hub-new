@@ -11,7 +11,9 @@ import Company from "./pages/Company _Dashboard/Company";
 import InvestorDashboard from "./pages/Investor/Investordashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import CreateAdmin from "./pages/Admin/CreateAdmin";
+
 import AdminProjectCard from "./pages/Admin/Adminprojectcard";
+
 import AdminMangeUsers from "./pages/Admin/AdminMangeUsers";
 import AdminSingleProjectView from "./pages/Admin/AdminSingleProjectView";
 import AdminIntrestedProj from "./pages/Admin/AdminIntrestedProj";
