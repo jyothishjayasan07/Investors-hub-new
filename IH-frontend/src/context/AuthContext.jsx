@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode"; // ✅ Correct
 
 import { useLocation, useNavigate } from "react-router-dom";
-
+ const API_URL = process.env.API_URL || "https://investors-hub-new.onrender.com"; // Use environment variable or default
 import { toast } from "react-toastify";
 // import { registerUser } from '../Services/AuthServices';
 
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   // ✅ Keep this in AuthContext (as-is)
   const register = async (formData) => {
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const res = await fetch("http://localhost:3000/login/", {
+      const res = await fetch(`${API_URL}/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
