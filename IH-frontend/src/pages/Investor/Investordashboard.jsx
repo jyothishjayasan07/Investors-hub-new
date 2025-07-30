@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { getApprovedProjects } from "../../services/projectService";
+import { IntrestedProjects } from "../../services/projectService";
 import { useAuth } from "../../context/AuthContext";
 import InvestorModal from "./InvestorModal";
 
@@ -20,6 +21,7 @@ const InvestorDashboard = ({onClose}) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [availableDates, setAvailableDates] = useState([""]);
 
   const { token } = useAuth();
 
@@ -41,12 +43,48 @@ const InvestorDashboard = ({onClose}) => {
   const openModal = (project) => {
     setSelectedProject(project);
     setModalVisible(true);
+     setAvailableDates([""]); // Reset dates
   };
 
   const closeModal = () => {
     setModalVisible(false);
     setSelectedProject(null);
   };
+
+
+
+  const handleDateChange = (index, value) => {
+    const updated = [...availableDates];
+    updated[index] = value;
+    setAvailableDates(updated);
+    console.log("Updated available dates:", updated);
+  };
+
+  const addDateField = () => {
+    setAvailableDates([...availableDates, ""]);
+  };
+
+const handleInterestClick = async () => {
+  try {
+    const res = await IntrestedProjects(selectedProject._id,availableDates, token);
+    console.log("Interest registered:", res);
+    // Optionally, show a toast or update UI here
+   
+
+  } catch (error) {
+    console.error("Failed to express interest:", error.message);
+  }
+};
+const handleonClick = (project) => {
+  openModal(project); 
+  setSelectedProject(project);
+  setAvailableDates([""]); // Reset dates when opening modal
+
+};
+
+
+
+
   const categories = [
     "all",
     "Clean Energy",
@@ -154,10 +192,10 @@ const InvestorDashboard = ({onClose}) => {
 
           <div className="flex gap-2">
           <button
-  onClick={() => openModal(project)}
+  onClick={() =>   handleonClick(project)}  
   className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
 >
-  Invest Now
+  View
 </button>
 
             <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
@@ -288,8 +326,12 @@ const InvestorDashboard = ({onClose}) => {
 
 <InvestorModal
   visible={modalVisible}
+  onSubmit={handleInterestClick}
   onClose={closeModal}
+  handleDateChange={handleDateChange}
+  addDateField={addDateField}
   project={selectedProject}
+  availableDates={availableDates}
 />
       </div>
     </div>

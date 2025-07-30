@@ -56,12 +56,9 @@ const stats = [
             </div>
           ))}
         </div>
-      <ProjectList setEditproject={setEditproject} setShowCreate={setShowCreate} setShowModal={setShowModal}   setViewProject={setViewProject} />
+      <ProjectList viewProject={viewProject} showModal={showModal} setEditproject={setEditproject} setShowCreate={setShowCreate} setShowModal={setShowModal}   setViewProject={setViewProject} />
       {showCreate && <CreateProject onClose={()=>handleOnClose()}  editproject={editproject} setEditproject={setEditproject} />}
-        {showModal && (
-  <ViewProjectDetails  project={viewProject}  onClose={() => setShowModal(false)} />
-)}
-    </div>
+ </div>
   );
 };
 
