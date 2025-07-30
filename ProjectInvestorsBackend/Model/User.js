@@ -31,8 +31,6 @@ const registerSchema = new mongoose.Schema({
   type:Boolean,
     default:false
   },
-
-
   password: {
     type: String,
     required: true,
