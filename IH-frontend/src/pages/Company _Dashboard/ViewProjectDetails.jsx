@@ -1,5 +1,5 @@
 import React from "react";
-
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 function ViewProjectDetails({ project, onClose, meetings }) {
   if (!project) return null;
 
@@ -21,7 +21,7 @@ function ViewProjectDetails({ project, onClose, meetings }) {
         <h2 className="text-xl font-bold mb-2">{project.title}</h2>
 
         <img
-          src={`http://localhost:3000/uploads/${project.image}`}
+          src={`Base_url/uploads/${project.image}`}
           alt={project.title}
           className="w-full h-64 object-cover rounded-xl mb-4 shadow"
         />
