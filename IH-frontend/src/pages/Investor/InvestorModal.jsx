@@ -1,6 +1,6 @@
 // components/InvestorModal.jsx
 import React, { useState } from "react";
-
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 const InvestorModal = ({ visible, onClose, project, onSubmit,handleDateChange,addDateField ,availableDates}) => {
   if (!visible || !project) return null;
 
@@ -28,7 +28,7 @@ const InvestorModal = ({ visible, onClose, project, onSubmit,handleDateChange,ad
         </button>
 
         <img
-          src={`http://localhost:3000/uploads/${project.image}`}
+          src={`Base_url/uploads/${project.image}`}
           alt={project.title}
           className="w-full h-64 object-cover rounded-lg mb-4"
         />
