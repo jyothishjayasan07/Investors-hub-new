@@ -6,7 +6,7 @@ import AdminProjectcard from "./AdminProjectCard";
 import CreateAdmin from "./CreateAdmin";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { getAllProjects } from "../../services/projectService";
+import { getAllProjects } from "../../temp/projectService";
 
 
 

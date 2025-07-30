@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getAllIntrestedProjects, getAllProjects, scheduleMeeting } from '../../services/projectService';
+import { getAllIntrestedProjects, getAllProjects, scheduleMeeting } from '../../temp/projectService';
 import AdminScheduleModal from './AdminScheduleModal';
 
 const AdminIntrestedProj = () => {

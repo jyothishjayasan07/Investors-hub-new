@@ -9,8 +9,8 @@ import {
   Filter,
 } from "lucide-react";
 
-import { getApprovedProjects } from "../../services/projectService";
-import { IntrestedProjects } from "../../services/projectService";
+import { getApprovedProjects } from "../../temp/projectService";
+import { IntrestedProjects } from "../../temp/projectService";
 import { useAuth } from "../../context/AuthContext";
 import InvestorModal from "./InvestorModal";
 

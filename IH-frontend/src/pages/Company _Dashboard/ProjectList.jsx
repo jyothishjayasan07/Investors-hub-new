@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Edit, Trash2, Calendar } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getAllScheduledMeetingsForProject } from "../../services/projectService";
+import { getAllScheduledMeetingsForProject } from "../../temp/projectService";
 import ViewProjectDetails from "./ViewProjectDetails";
 
 const ProjectList = ({ setShowCreate, setEditproject, setViewProject, setShowModal, showModal, viewProject }) => {

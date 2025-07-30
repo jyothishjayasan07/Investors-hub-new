@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useAuth } from "../../context/AuthContext";
-import { getAllusersList } from "../../services/projectService";
+import { getAllusersList } from "../../temp/projectService";
 
 function AdminManageUsers() {
   const [userList, setUserList] = useState([]);
