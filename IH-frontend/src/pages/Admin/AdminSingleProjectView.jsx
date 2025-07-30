@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import { getAllProjects, handleApprove } from "../../services/projectService";
+import { getAllProjects, handleApprove } from "../../temp/projectService";
 import { useAuth } from "../../context/AuthContext";
 
 

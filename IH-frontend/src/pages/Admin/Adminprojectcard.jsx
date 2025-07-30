@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllProjects } from "../../Services/projectService";
+import { getAllProjects } from "../../temp/projectService";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "lucide-react";
 import { NavLink } from "react-router-dom";
