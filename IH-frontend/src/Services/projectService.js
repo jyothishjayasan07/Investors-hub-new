@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://investors-hub-new.onrender.com/";
 
 export const fetchProjects = async (token) => {
   const res = await fetch(`${API_URL}/projectofuser`, {

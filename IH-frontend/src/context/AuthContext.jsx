@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   // ✅ Keep this in AuthContext (as-is)
   const register = async (formData) => {
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("https://investors-hub-new.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const res = await fetch("http://localhost:3000/login/", {
+      const res = await fetch("https://investors-hub-new.onrender.com/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
