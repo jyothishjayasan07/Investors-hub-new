@@ -28,7 +28,7 @@ const InvestorModal = ({ visible, onClose, project, onSubmit,handleDateChange,ad
         </button>
 
         <img
-          src={`Base_url/uploads/${project.image}`}
+          src={`${Base_url}/uploads/${project.image}`}
           alt={project.title}
           className="w-full h-64 object-cover rounded-lg mb-4"
         />

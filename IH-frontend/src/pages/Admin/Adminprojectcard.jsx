@@ -30,7 +30,7 @@ const AdminProjectCard = () => {
           className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden"
         >
           <img
-            src={`Base_url/uploads/${project.image}`}
+            src={`${Base_url}/uploads/${project.image}`}
             alt={project.title}
             className="w-full h-40 object-cover"
           />
