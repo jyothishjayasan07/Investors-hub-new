@@ -21,7 +21,7 @@ function ViewProjectDetails({ project, onClose, meetings }) {
         <h2 className="text-xl font-bold mb-2">{project.title}</h2>
 
         <img
-          src={`Base_url/uploads/${project.image}`}
+          src={`${Base_url}/uploads/${project.image}`}
           alt={project.title}
           className="w-full h-64 object-cover rounded-xl mb-4 shadow"
         />
