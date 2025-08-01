@@ -41,7 +41,7 @@ const AdminSingleProjectView = () => {
   return (
     <div className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-md mt-10">
       <img
-        src={`Base_url/uploads/${project.image}`}
+        src={`${Base_url}/uploads/${project.image}`}
         alt={project.title}
         className="w-full h-64 object-cover rounded-xl mb-6"
       />

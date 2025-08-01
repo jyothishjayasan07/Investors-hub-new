@@ -13,7 +13,7 @@ import { getApprovedProjects } from "../../temp/projectService";
 import { IntrestedProjects } from "../../temp/projectService";
 import { useAuth } from "../../context/AuthContext";
 import InvestorModal from "./InvestorModal";
-
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 const InvestorDashboard = ({onClose}) => {
   const [activeTab, setActiveTab] = useState("discover");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -132,7 +132,7 @@ const handleonClick = (project) => {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
         <div className="relative">
           <img
-            src={`http://localhost:3000/uploads/${project.image}`}
+            src={`${Base_url}/uploads/${project.image}`}
             alt={project.title}
             className="w-full h-48 object-cover"
           />
