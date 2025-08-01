@@ -1,5 +1,4 @@
-const API_URL =import.meta.env.VITE_API_URL||  "https://investors-hub-new.onrender.com";  // Use environment variable or default
-
+const API_URL=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 
 export const fetchProjects = async (token) => {
   const res = await fetch(`${API_URL}/projectofuser`, {

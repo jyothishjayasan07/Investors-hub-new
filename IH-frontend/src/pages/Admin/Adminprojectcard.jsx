@@ -3,7 +3,7 @@ import { getAllProjects } from "../../temp/projectService";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "lucide-react";
 import { NavLink } from "react-router-dom";
-
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 const AdminProjectCard = () => {
   const [projectList, setProjectList] = useState([]);
     const { token } = useAuth();
@@ -30,7 +30,7 @@ const AdminProjectCard = () => {
           className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden"
         >
           <img
-            src={`http://localhost:3000/uploads/${project.image}`}
+            src={`Base_url/uploads/${project.image}`}
             alt={project.title}
             className="w-full h-40 object-cover"
           />

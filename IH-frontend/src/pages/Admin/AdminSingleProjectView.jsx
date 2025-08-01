@@ -3,7 +3,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { getAllProjects, handleApprove } from "../../temp/projectService";
 import { useAuth } from "../../context/AuthContext";
 
-
+const Base_url=import.meta.env.VITE_API_URL|| "https://investors-hub-new.onrender.com";
 const AdminSingleProjectView = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
@@ -41,7 +41,7 @@ const AdminSingleProjectView = () => {
   return (
     <div className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-md mt-10">
       <img
-        src={`http://localhost:3000/uploads/${project.image}`}
+        src={`Base_url/uploads/${project.image}`}
         alt={project.title}
         className="w-full h-64 object-cover rounded-xl mb-6"
       />
