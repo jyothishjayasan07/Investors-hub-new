@@ -77,7 +77,7 @@ const ProjectList = ({ setShowCreate, setEditproject, setViewProject, setShowMod
 
             {/* Image */}
             <img
-              src={`Base_url/uploads/${project.image}`}
+              src={`${Base_url}/uploads/${project.image}`}
               alt={project.title}
               className="w-full h-48 object-cover rounded-lg mb-3"
             />
