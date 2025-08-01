@@ -46,7 +46,7 @@ function AdminDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50">
  
-      <div className="w-72 hidden lg:block">
+      <div className="w-72 ">
         <AdminSidebar onSelect={setDisplay} activeTab={display} />
       </div>
 
